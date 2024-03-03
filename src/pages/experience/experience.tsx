@@ -1,5 +1,5 @@
-import { GameExperience } from '@/shared/game-experience'
 import { Layout } from '@/shared/ui'
+import { GameExperience } from '@/widgets/game-experience'
 
 const ExperiencePage = () => {
   return (

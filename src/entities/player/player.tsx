@@ -1,12 +1,13 @@
 import { useGLTF } from '@react-three/drei'
-import { RigidBody } from '@react-three/rapier'
+// @ts-expect-error miss type declaration
+import Ecctrl from 'ecctrl'
 
 const Player = () => {
   const gltf = useGLTF('./experience/ghost.glb')
   return (
-    <RigidBody>
-      <primitive object={gltf.scene} />
-    </RigidBody>
+    <Ecctrl mode="PointToMove">
+      <primitive object={gltf.scene} position-y={-0.5} rotation-y={Math.PI} />
+    </Ecctrl>
   )
 }
 
