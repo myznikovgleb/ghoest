@@ -1,9 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import { RigidBody } from '@react-three/rapier'
-// @ts-expect-error miss type declaration
-import { useGame } from 'ecctrl'
 
-import type { ThreeEvent } from '@react-three/fiber'
 import type { Mesh, MeshStandardMaterial } from 'three'
 import type { GLTF } from 'three-stdlib'
 
@@ -24,16 +21,9 @@ type GLTFResult = GLTF & {
 const Ground = () => {
   const { nodes, materials } = useGLTF('./experience/ground.glb') as GLTFResult
 
-  // @ts-expect-error miss type declaration
-  const setMoveToPoint = useGame((state) => state.setMoveToPoint)
-
   return (
     <RigidBody type="fixed">
-      <group
-        onPointerDown={({ point }: ThreeEvent<PointerEvent>) => {
-          setMoveToPoint(point)
-        }}
-      >
+      <group>
         <group dispose={null} position={[0, 0, 0]}>
           <mesh geometry={nodes.ground.geometry} material={materials.ground} />
           <mesh

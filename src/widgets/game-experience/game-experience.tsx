@@ -6,12 +6,12 @@ import { Ground, Player } from '@/entities'
 
 const GameExperience = () => {
   return (
-    <Canvas className="cursor-pointer">
+    <Canvas camera={{ position: [0, 4, 0] }} className="cursor-pointer">
       <Environment preset="city" />
 
       <OrbitControls />
 
-      <Physics debug>
+      <Physics>
         <Player />
         <Ground />
       </Physics>
