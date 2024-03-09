@@ -1,11 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import { ExperiencePage } from './experience'
+import { _ } from './_'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ExperiencePage />,
+    element: <_ />,
   },
 ])
 

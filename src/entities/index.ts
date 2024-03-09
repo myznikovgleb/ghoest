@@ -1,2 +1,2 @@
-export * from './ground'
+export * from './map'
 export * from './player'

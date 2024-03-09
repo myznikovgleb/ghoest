@@ -1,1 +1,1 @@
-export * from './game-experience'
+export * from './experience'
