@@ -23,10 +23,10 @@ const Map = () => {
   }
 
   return (
-    <group onPointerMove={onPointerMove}>
+    <group>
       <Pointer position={pointerPosition} />
       <RigidBody type="fixed">
-        <group>
+        <group onPointerMove={onPointerMove}>
           <Tile position={[-2, 0, -2]} />
           <Tile position={[-2, 0, 0]} />
           <Tile position={[-2, 0, 2]} />
