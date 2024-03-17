@@ -7,12 +7,16 @@ import { Tile } from './tile'
 import type { ThreeEvent } from '@react-three/fiber'
 import type { Vector3Tuple } from 'three'
 
+import { usePlayerStore } from '..'
+
 const Map = () => {
   const [pointerPosition, setPointerPosition] = useState<Vector3Tuple>([
     0,
     0 + 0.01,
     0,
   ])
+
+  const setPosition = usePlayerStore((state) => state.setPosition)
 
   const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
     const { point } = event
@@ -22,11 +26,17 @@ const Map = () => {
     })
   }
 
+  const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
+    const { point } = event
+
+    setPosition([point.x, point.y, point.z])
+  }
+
   return (
     <group>
       <Pointer position={pointerPosition} />
       <RigidBody type="fixed">
-        <group onPointerMove={onPointerMove}>
+        <group onPointerMove={onPointerMove} onPointerDown={onPointerDown}>
           <Tile position={[-2, 0, -2]} />
           <Tile position={[-2, 0, 0]} />
           <Tile position={[-2, 0, 2]} />

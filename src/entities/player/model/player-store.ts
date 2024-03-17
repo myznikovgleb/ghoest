@@ -2,14 +2,19 @@ import { create } from 'zustand'
 
 import type { Vector3Tuple } from 'three'
 
-interface PlayerState {
+interface InitialState {
   position: Vector3Tuple
 }
 
-const initialState: PlayerState = {
+interface PlayerState extends InitialState {
+  setPosition: (nextPosition: Vector3Tuple) => void
+}
+
+const initialState: InitialState = {
   position: [0, 0, 0],
 }
 
-export const usePlayerStore = create<PlayerState>()(() => ({
+export const usePlayerStore = create<PlayerState>()((set) => ({
   ...initialState,
+  setPosition: (nextPosition) => set({ position: nextPosition }),
 }))
