@@ -1,33 +1,61 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { RigidBody, vec3 } from '@react-three/rapier'
+import { CuboidCollider, RigidBody, vec3 } from '@react-three/rapier'
 import { useRef } from 'react'
 
 import type { RapierRigidBody } from '@react-three/rapier'
+import type { Group } from 'three'
 
 import { usePlayerStore } from '..'
 
 const Player = () => {
   const gltf = useGLTF('./experience/ghost.glb')
 
-  const ref = useRef<RapierRigidBody>(null)
+  const refRigidBody = useRef<RapierRigidBody>(null)
+  const refModel = useRef<Group>(null)
 
   const position = usePlayerStore((state) => state.position)
 
-  useFrame(() => {
-    if (!ref.current) {
+  useFrame((_, delta) => {
+    if (!refRigidBody.current) {
       return
     }
 
-    ref.current.setTranslation(
-      vec3({ x: position[0], y: position[1], z: position[2] }),
-      true
-    )
+    const prevPosition = vec3(refRigidBody.current.translation())
+    const nextPosition = vec3({
+      x: position[0],
+      y: 0.5,
+      z: position[2],
+    })
+
+    const diff = nextPosition.sub(prevPosition)
+    const direction = diff.clone().normalize()
+    const translation = direction.clone().multiplyScalar(100)
+
+    if (diff.length() > 0.5) {
+      refRigidBody.current.setLinvel(translation.multiplyScalar(delta), true)
+    }
+
+    if (!refModel.current) {
+      return
+    }
+
+    if (diff.length() > 0.5) {
+      refModel.current.lookAt(
+        prevPosition.add(translation).sub(vec3({ x: 0, y: 0.5, z: 0 }))
+      )
+    }
   })
 
   return (
-    <RigidBody ref={ref} lockRotations>
-      <primitive object={gltf.scene} />
+    <RigidBody
+      colliders={false}
+      lockRotations
+      ref={refRigidBody}
+      position-y={0.5}
+    >
+      <CuboidCollider args={[0.5, 0.5, 0.5]} />
+      <primitive object={gltf.scene} ref={refModel} position-y={-0.25} />
     </RigidBody>
   )
 }

@@ -1,4 +1,4 @@
-import { RigidBody } from '@react-three/rapier'
+import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { useState } from 'react'
 
 import { Pointer } from './pointer'
@@ -35,8 +35,13 @@ const Map = () => {
   return (
     <group>
       <Pointer position={pointerPosition} />
-      <RigidBody type="fixed">
-        <group onPointerMove={onPointerMove} onPointerDown={onPointerDown}>
+      <RigidBody type="fixed" colliders={false} position-y={-0.125}>
+        <CuboidCollider args={[3, 0.125, 3]} />
+        <group
+          position-y={0.125}
+          onPointerMove={onPointerMove}
+          onPointerDown={onPointerDown}
+        >
           <Tile position={[-2, 0, -2]} />
           <Tile position={[-2, 0, 0]} />
           <Tile position={[-2, 0, 2]} />
