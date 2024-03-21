@@ -29,6 +29,9 @@ const Map = () => {
   const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
     const { point } = event
 
+    setPointerPosition((prevPointerPosition) => {
+      return [point.x, prevPointerPosition[1], point.z]
+    })
     setPosition([point.x, point.y, point.z])
   }
 
