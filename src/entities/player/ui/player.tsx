@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
-import { CuboidCollider, RigidBody, vec3 } from '@react-three/rapier'
-import { useRef } from 'react'
+import { CapsuleCollider, RigidBody, vec3 } from '@react-three/rapier'
+import { useEffect, useRef } from 'react'
 
 import { Ghost } from '@/shared/resources'
 
@@ -9,11 +9,33 @@ import { usePlayerStore } from '..'
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
 
+const TRANSLATION_FACTOR = 50
+const EPS_DISTANCE = 0.25
+
 const Player = () => {
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
 
+  const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
   const position = usePlayerStore((state) => state.position)
+
+  useEffect(() => {
+    if (!refRigidBody.current) {
+      return
+    }
+
+    refRigidBody.current.setTranslation(
+      vec3({ x: 0, y: capsuleCollider.h * 0.5, z: 0 }),
+      true
+    )
+
+    if (!refModel.current) {
+      return
+    }
+
+    refModel.current.position.set(0, -capsuleCollider.h, 0)
+    refModel.current.lookAt(0, -capsuleCollider.h, 1)
+  }, [capsuleCollider])
 
   useFrame((_, delta) => {
     if (!refRigidBody.current) {
@@ -23,15 +45,21 @@ const Player = () => {
     const prevPosition = vec3(refRigidBody.current.translation())
     const nextPosition = vec3({
       x: position[0],
-      y: 0.5,
+      y: position[1],
       z: position[2],
     })
 
-    const diff = nextPosition.sub(prevPosition)
-    const direction = diff.clone().normalize()
-    const translation = direction.clone().multiplyScalar(100)
+    const diff = vec3({
+      x: nextPosition.x - prevPosition.x,
+      y: 0,
+      z: nextPosition.z - prevPosition.z,
+    })
+    const distance = diff.length()
 
-    if (diff.length() > 0.5) {
+    const direction = diff.clone().normalize()
+    const translation = direction.clone().multiplyScalar(TRANSLATION_FACTOR)
+
+    if (distance > EPS_DISTANCE) {
       refRigidBody.current.setLinvel(translation.multiplyScalar(delta), true)
     }
 
@@ -39,22 +67,21 @@ const Player = () => {
       return
     }
 
-    if (diff.length() > 0.5) {
-      refModel.current.lookAt(
-        prevPosition.add(translation).sub(vec3({ x: 0, y: 0.5, z: 0 }))
-      )
+    const target = vec3({
+      x: prevPosition.x + translation.x,
+      y: 0,
+      z: prevPosition.z + translation.z,
+    })
+
+    if (distance > EPS_DISTANCE) {
+      refModel.current.lookAt(target)
     }
   })
 
   return (
-    <RigidBody
-      colliders={false}
-      lockRotations
-      ref={refRigidBody}
-      position-y={0.5}
-    >
-      <CuboidCollider args={[0.5, 0.5, 0.5]} />
-      <Ghost ref={refModel} position-y={-0.25} />
+    <RigidBody ref={refRigidBody} colliders={false} lockRotations>
+      <CapsuleCollider args={[capsuleCollider.h * 0.5, capsuleCollider.r]} />
+      <Ghost ref={refModel} />
     </RigidBody>
   )
 }
