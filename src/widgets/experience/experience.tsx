@@ -6,7 +6,7 @@ import { Map, Player } from '@/entities'
 
 const Experience = () => {
   return (
-    <Canvas camera={{ position: [0, 4, 0] }} className="cursor-pointer">
+    <Canvas camera={{ position: [0, 2, -4] }} className="cursor-pointer">
       <Environment preset="city" />
 
       <OrbitControls />
