@@ -1,13 +1,14 @@
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { useState } from 'react'
 
+import { usePlayerStore } from '..'
+
 import { Pointer } from './pointer'
 import { Tile } from './tile'
 
 import type { ThreeEvent } from '@react-three/fiber'
 import type { Vector3Tuple } from 'three'
 
-import { usePlayerStore } from '..'
 
 const Map = () => {
   const [pointerPosition, setPointerPosition] = useState<Vector3Tuple>([

@@ -4,10 +4,10 @@ import { useRef } from 'react'
 
 import { Ghost } from '@/shared/resources'
 
+import { usePlayerStore } from '..'
+
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
-
-import { usePlayerStore } from '..'
 
 const Player = () => {
   const refRigidBody = useRef<RapierRigidBody>(null)
