@@ -1,7 +1,8 @@
-import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { CuboidCollider, RigidBody, vec3 } from '@react-three/rapier'
 import { useRef } from 'react'
+
+import { Ghost } from '@/shared/resources'
 
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
@@ -9,8 +10,6 @@ import type { Group } from 'three'
 import { usePlayerStore } from '..'
 
 const Player = () => {
-  const gltf = useGLTF('./experience/ghost.glb')
-
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
 
@@ -55,11 +54,9 @@ const Player = () => {
       position-y={0.5}
     >
       <CuboidCollider args={[0.5, 0.5, 0.5]} />
-      <primitive object={gltf.scene} ref={refModel} position-y={-0.25} />
+      <Ghost ref={refModel} position-y={-0.25} />
     </RigidBody>
   )
 }
-
-useGLTF.preload('./experience/ghost.glb')
 
 export { Player }
