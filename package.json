@@ -20,6 +20,7 @@
     "react-router-dom": "^6.19.0",
     "three": "^0.162.0",
     "three-stdlib": "^2.29.5",
+    "ts-pattern": "^5.0.8",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
