@@ -9,8 +9,8 @@ import { usePlayerStore } from '..'
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
 
-const TRANSLATION_FACTOR = 50
-const EPS_DISTANCE = 0.25
+const TRANSLATION_FACTOR = 100
+const EPS_DISTANCE = 0.5
 
 const Player = () => {
   const refRigidBody = useRef<RapierRigidBody>(null)
@@ -25,7 +25,7 @@ const Player = () => {
     }
 
     refRigidBody.current.setTranslation(
-      vec3({ x: 0, y: capsuleCollider.h * 0.5, z: 0 }),
+      vec3({ x: 0, y: capsuleCollider.h * 2, z: 0 }),
       true
     )
 
