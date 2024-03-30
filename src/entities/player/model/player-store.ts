@@ -12,7 +12,7 @@ interface PlayerState extends InitialState {
 }
 
 const initialState: InitialState = {
-  capsuleCollider: { h: 0.5, r: 0.3 },
+  capsuleCollider: { h: 0.35, r: 0.25 },
   position: [0, 0, 0],
 }
 

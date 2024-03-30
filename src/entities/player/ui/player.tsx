@@ -9,8 +9,8 @@ import { usePlayerStore } from '..'
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
 
-const TRANSLATION_FACTOR = 100
-const EPS_DISTANCE = 0.5
+const TRANSLATION_FACTOR = 75
+const EPS_DISTANCE = 1.0
 
 const Player = () => {
   const refRigidBody = useRef<RapierRigidBody>(null)
