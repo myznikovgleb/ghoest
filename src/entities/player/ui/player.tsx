@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { CapsuleCollider, RigidBody, vec3 } from '@react-three/rapier'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import { Ghost } from '@/shared/resources'
 
@@ -18,24 +18,6 @@ const Player = () => {
 
   const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
   const position = usePlayerStore((state) => state.position)
-
-  useEffect(() => {
-    if (!refRigidBody.current) {
-      return
-    }
-
-    refRigidBody.current.setTranslation(
-      vec3({ x: 0, y: capsuleCollider.h * 2, z: 0 }),
-      true
-    )
-
-    if (!refModel.current) {
-      return
-    }
-
-    refModel.current.position.set(0, -capsuleCollider.h, 0)
-    refModel.current.lookAt(0, -capsuleCollider.h, 1)
-  }, [capsuleCollider])
 
   useFrame((_, delta) => {
     if (!refRigidBody.current) {
@@ -69,7 +51,7 @@ const Player = () => {
 
     const target = vec3({
       x: prevPosition.x + translation.x,
-      y: 0,
+      y: prevPosition.y - capsuleCollider.halfHeight,
       z: prevPosition.z + translation.z,
     })
 
@@ -79,9 +61,16 @@ const Player = () => {
   })
 
   return (
-    <RigidBody ref={refRigidBody} colliders={false} lockRotations>
-      <CapsuleCollider args={[capsuleCollider.h * 0.5, capsuleCollider.r]} />
-      <Ghost ref={refModel} />
+    <RigidBody
+      ref={refRigidBody}
+      colliders={false}
+      lockRotations
+      position={[0, capsuleCollider.halfHeight * 4, 0]}
+    >
+      <CapsuleCollider
+        args={[capsuleCollider.halfHeight, capsuleCollider.radius]}
+      />
+      <Ghost ref={refModel} position={[0, -capsuleCollider.halfHeight, 0]} />
     </RigidBody>
   )
 }
