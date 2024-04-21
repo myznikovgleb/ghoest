@@ -4,6 +4,8 @@ import './index.css'
 
 import { router } from '@/pages'
 
-export const App = () => {
+const App = () => {
   return <RouterProvider router={router} />
 }
+
+export { App }

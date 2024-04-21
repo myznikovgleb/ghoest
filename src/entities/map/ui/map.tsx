@@ -1,7 +1,7 @@
 import { RigidBody } from '@react-three/rapier'
 import { useState } from 'react'
 
-import { usePlayerStore } from '..'
+import { usePlayerStore } from '@/entities/player'
 
 import { Pointer } from './pointer'
 import { TileSet } from './tileset'
