@@ -13,7 +13,7 @@ const Experience = (props: ExperienceProps) => {
   const { isDebug } = props
 
   return (
-    <Canvas camera={{ position: [0, 2, -4] }} className="cursor-pointer">
+    <Canvas camera={{ position: [0, 2, 4] }} className="cursor-pointer">
       <Environment preset="city" />
 
       {isDebug && <OrbitControls />}

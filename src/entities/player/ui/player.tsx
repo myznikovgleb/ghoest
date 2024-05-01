@@ -1,63 +1,107 @@
 import { useFrame } from '@react-three/fiber'
-import { CapsuleCollider, RigidBody, vec3 } from '@react-three/rapier'
-import { useRef } from 'react'
+import { CapsuleCollider, RigidBody } from '@react-three/rapier'
+import { useMemo, useRef } from 'react'
+import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 import { Ghost } from '@/shared/resources'
+import { approximatelyEqual } from '@/shared/utils/math'
 
 import { usePlayerStore } from '..'
 
 import type { RapierRigidBody } from '@react-three/rapier'
 import type { Group } from 'three'
 
-const TRANSLATION_FACTOR = 75
-const EPS_DISTANCE = 1.0
+const FACTOR_ROTATION = 5
+const FACTOR_VELOCITY = 10
+const FACTOR_FORCE_DAMPING = 0.5
 
 const Player = () => {
+  const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
+  const nextPositionSerialized = usePlayerStore((state) => state.position)
+
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
 
-  const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
-  const position = usePlayerStore((state) => state.position)
+  const prevPosition = useMemo<Vector3>(() => new Vector3(), [])
+  const prevVelocity = useMemo<Vector3>(() => new Vector3(), [])
+
+  const nextPosition = useMemo<Vector3>(() => new Vector3(), [])
+  const nextVelocity = useMemo<Vector3>(() => new Vector3(), [])
+
+  const nextEuler = useMemo<Euler>(() => new Euler(), [])
+  const nextQuaternion = useMemo<Quaternion>(() => new Quaternion(), [])
+
+  const diffPosition = useMemo<Vector3>(() => new Vector3(), [])
+
+  const stepModel = useMemo<Object3D>(() => new Object3D(), [])
+  const stepDirection = useMemo<Vector3>(() => new Vector3(), [])
+  const stepAcceleration = useMemo<Vector3>(() => new Vector3(), [])
+  const stepForce = useMemo<Vector3>(() => new Vector3(), [])
+  const stepImpulse = useMemo<Vector3>(() => new Vector3(), [])
+
+  const vectorZ = useMemo<Vector3>(() => new Vector3(0, 0, 1), [])
+
+  const bufferVector = useMemo<Vector3>(() => new Vector3(), [])
+
+  const setMovement = () => {
+    if (!refRigidBody.current || !refModel.current) {
+      return
+    }
+
+    prevPosition.copy(refRigidBody.current.translation())
+    nextPosition.set(...nextPositionSerialized)
+    diffPosition.set(
+      nextPosition.x - prevPosition.x,
+      0,
+      nextPosition.z - prevPosition.z
+    )
+
+    bufferVector.crossVectors(vectorZ, diffPosition)
+    nextEuler.y = Math.sign(bufferVector.y) * vectorZ.angleTo(diffPosition)
+    nextQuaternion.setFromEuler(nextEuler)
+
+    stepDirection.copy(vectorZ).applyQuaternion(stepModel.quaternion)
+
+    prevVelocity.copy(refRigidBody.current.linvel())
+    nextVelocity
+      .set(stepDirection.x, 0, stepDirection.z)
+      .multiplyScalar(FACTOR_VELOCITY)
+    stepAcceleration.subVectors(nextVelocity, prevVelocity)
+
+    stepForce.copy(stepAcceleration).multiplyScalar(refRigidBody.current.mass())
+
+    const isRotationCompleted = approximatelyEqual(
+      Math.sin(nextEuler.y),
+      Math.sin(stepModel.rotation.y),
+      3
+    )
+
+    if (!isRotationCompleted) {
+      stepForce.multiplyScalar(FACTOR_FORCE_DAMPING)
+    }
+  }
+
+  const step = (delta: number) => {
+    if (!refRigidBody.current || !refModel.current) {
+      return
+    }
+
+    const hasSpaceToMove = diffPosition.length() > capsuleCollider.radius * 1.5
+    if (!hasSpaceToMove) {
+      return
+    }
+
+    stepModel.quaternion.rotateTowards(nextQuaternion, delta * FACTOR_ROTATION)
+    refModel.current.quaternion.copy(stepModel.quaternion)
+
+    stepImpulse.copy(stepForce).multiplyScalar(delta)
+    refRigidBody.current.applyImpulse(stepImpulse, true)
+  }
 
   useFrame((_, delta) => {
-    if (!refRigidBody.current) {
-      return
-    }
+    setMovement()
 
-    const prevPosition = vec3(refRigidBody.current.translation())
-    const nextPosition = vec3({
-      x: position[0],
-      y: position[1],
-      z: position[2],
-    })
-
-    const diff = vec3({
-      x: nextPosition.x - prevPosition.x,
-      y: 0,
-      z: nextPosition.z - prevPosition.z,
-    })
-    const distance = diff.length()
-
-    const direction = diff.clone().normalize()
-    const translation = direction.clone().multiplyScalar(TRANSLATION_FACTOR)
-
-    if (distance > EPS_DISTANCE) {
-      refRigidBody.current.setLinvel(translation.multiplyScalar(delta), true)
-    }
-
-    if (!refModel.current) {
-      return
-    }
-
-    const target = vec3({
-      x: prevPosition.x + translation.x,
-      y: prevPosition.y - capsuleCollider.halfHeight,
-      z: prevPosition.z + translation.z,
-    })
-
-    if (distance > EPS_DISTANCE) {
-      refModel.current.lookAt(target)
-    }
+    step(delta)
   })
 
   return (
