@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { CapsuleCollider, RigidBody } from '@react-three/rapier'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 import { Ghost } from '@/shared/resources'
@@ -9,11 +9,12 @@ import { approximatelyEqual } from '@/shared/utils/math'
 import { usePlayerStore } from '..'
 
 import type { RapierRigidBody } from '@react-three/rapier'
-import type { Group } from 'three'
+import type { Camera, Group } from 'three'
 
 const FACTOR_ROTATION = 5
 const FACTOR_VELOCITY = 10
 const FACTOR_FORCE_DAMPING = 0.5
+const FACTOR_CAMERA_SMOOTH = 5
 
 const Player = () => {
   const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
@@ -21,6 +22,14 @@ const Player = () => {
 
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
+
+  const [cameraPositionCoarse] = useState(new Vector3())
+  const [cameraPositionSmooth] = useState(new Vector3())
+  const [cameraPositionShift] = useState(new Vector3(0, 1, 4))
+
+  const [cameraTargetCoarse] = useState(new Vector3())
+  const [cameraTargetSmooth] = useState(new Vector3())
+  const [cameraTargetShift] = useState(new Vector3(0, 0.5, 0))
 
   const prevPosition = useMemo<Vector3>(() => new Vector3(), [])
   const prevVelocity = useMemo<Vector3>(() => new Vector3(), [])
@@ -81,6 +90,16 @@ const Player = () => {
     }
   }
 
+  const setCamera = (camera: Camera) => {
+    cameraPositionCoarse.copy(prevPosition).add(cameraPositionShift)
+    cameraPositionSmooth.lerp(cameraPositionCoarse, FACTOR_CAMERA_SMOOTH)
+    camera.position.copy(cameraPositionCoarse)
+
+    cameraTargetCoarse.copy(prevPosition).add(cameraTargetShift)
+    cameraTargetSmooth.lerp(cameraTargetCoarse, FACTOR_CAMERA_SMOOTH)
+    camera.lookAt(cameraPositionCoarse)
+  }
+
   const step = (delta: number) => {
     if (!refRigidBody.current || !refModel.current) {
       return
@@ -98,7 +117,8 @@ const Player = () => {
     refRigidBody.current.applyImpulse(stepImpulse, true)
   }
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
+    setCamera(state.camera)
     setMovement()
 
     step(delta)

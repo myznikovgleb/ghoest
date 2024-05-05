@@ -16,10 +16,11 @@ const TileSet = (props: TileSetProps) => {
   const { onPointerMove, onPointerDown, onPointerUp } = props
 
   const [tileSet] = useState<TileType[][]>([
-    ['G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'G', 'G'],
   ])
 
   return (
