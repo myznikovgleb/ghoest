@@ -28,11 +28,11 @@ const Player = () => {
 
   const [cameraPositionCoarse] = useState(new Vector3())
   const [cameraPositionSmooth] = useState(new Vector3())
-  const [cameraPositionShift] = useState(new Vector3(0, 0.75, 3.0))
+  const [cameraPositionShift] = useState(new Vector3(0, 0.75, 5.5))
 
   const [cameraTargetCoarse] = useState(new Vector3())
   const [cameraTargetSmooth] = useState(new Vector3())
-  const [cameraTargetShift] = useState(new Vector3(0, 0.25, 0))
+  const [cameraTargetShift] = useState(new Vector3(0, 1.0, 0))
 
   const prevPosition = useMemo<Vector3>(() => new Vector3(), [])
   const prevVelocity = useMemo<Vector3>(() => new Vector3(), [])
@@ -100,7 +100,7 @@ const Player = () => {
 
     cameraTargetCoarse.copy(prevPosition).add(cameraTargetShift)
     cameraTargetSmooth.lerp(cameraTargetCoarse, FACTOR_CAMERA_SMOOTH)
-    camera.lookAt(cameraPositionCoarse)
+    // camera.lookAt(cameraTargetSmooth)
   }
 
   const step = (delta: number) => {
