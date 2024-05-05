@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 import { Ghost } from '@/shared/resources'
+import { useIsDebug } from '@/shared/utils/hooks'
 import { approximatelyEqual } from '@/shared/utils/math'
 
 import { usePlayerStore } from '..'
@@ -20,16 +21,18 @@ const Player = () => {
   const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
   const nextPositionSerialized = usePlayerStore((state) => state.position)
 
+  const isDebug = useIsDebug()
+
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
 
   const [cameraPositionCoarse] = useState(new Vector3())
   const [cameraPositionSmooth] = useState(new Vector3())
-  const [cameraPositionShift] = useState(new Vector3(0, 1, 4))
+  const [cameraPositionShift] = useState(new Vector3(0, 0.75, 3.0))
 
   const [cameraTargetCoarse] = useState(new Vector3())
   const [cameraTargetSmooth] = useState(new Vector3())
-  const [cameraTargetShift] = useState(new Vector3(0, 0.5, 0))
+  const [cameraTargetShift] = useState(new Vector3(0, 0.25, 0))
 
   const prevPosition = useMemo<Vector3>(() => new Vector3(), [])
   const prevVelocity = useMemo<Vector3>(() => new Vector3(), [])
@@ -118,7 +121,7 @@ const Player = () => {
   }
 
   useFrame((state, delta) => {
-    setCamera(state.camera)
+    !isDebug && setCamera(state.camera)
     setMovement()
 
     step(delta)
