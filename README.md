@@ -1,6 +1,6 @@
 # Ghoest app
 
-Ghoest app is an RPG app significantly charged with dark magic.
+[Ghoest app](https://ghoest.vercel.app "Ghoest app") is an RPG app significantly charged with dark magic.
 
 ## Details
 
