@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { CapsuleCollider, RigidBody } from '@react-three/rapier'
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 import { Ghost } from '@/shared/resources'
@@ -26,34 +26,34 @@ const Player = () => {
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
 
-  const [cameraPositionCoarse] = useState(new Vector3())
-  const [cameraPositionSmooth] = useState(new Vector3())
-  const [cameraPositionShift] = useState(new Vector3(0, 0.75, 5.5))
+  const [cameraPositionCoarse] = useState<Vector3>(new Vector3())
+  const [cameraPositionSmooth] = useState<Vector3>(new Vector3())
+  const [cameraPositionShift] = useState<Vector3>(new Vector3(0, 0.75, 5.5))
 
-  const [cameraTargetCoarse] = useState(new Vector3())
-  const [cameraTargetSmooth] = useState(new Vector3())
-  const [cameraTargetShift] = useState(new Vector3(0, 1.0, 0))
+  const [cameraTargetCoarse] = useState<Vector3>(new Vector3())
+  const [cameraTargetSmooth] = useState<Vector3>(new Vector3())
+  const [cameraTargetShift] = useState<Vector3>(new Vector3(0, 1.0, 0))
 
-  const prevPosition = useMemo<Vector3>(() => new Vector3(), [])
-  const prevVelocity = useMemo<Vector3>(() => new Vector3(), [])
+  const [prevPosition] = useState<Vector3>(new Vector3())
+  const [prevVelocity] = useState<Vector3>(new Vector3())
 
-  const nextPosition = useMemo<Vector3>(() => new Vector3(), [])
-  const nextVelocity = useMemo<Vector3>(() => new Vector3(), [])
+  const [nextPosition] = useState<Vector3>(new Vector3())
+  const [nextVelocity] = useState<Vector3>(new Vector3())
 
-  const nextEuler = useMemo<Euler>(() => new Euler(), [])
-  const nextQuaternion = useMemo<Quaternion>(() => new Quaternion(), [])
+  const [nextEuler] = useState<Euler>(new Euler())
+  const [nextQuaternion] = useState<Quaternion>(new Quaternion())
 
-  const diffPosition = useMemo<Vector3>(() => new Vector3(), [])
+  const [diffPosition] = useState<Vector3>(new Vector3())
 
-  const stepModel = useMemo<Object3D>(() => new Object3D(), [])
-  const stepDirection = useMemo<Vector3>(() => new Vector3(), [])
-  const stepAcceleration = useMemo<Vector3>(() => new Vector3(), [])
-  const stepForce = useMemo<Vector3>(() => new Vector3(), [])
-  const stepImpulse = useMemo<Vector3>(() => new Vector3(), [])
+  const [stepModel] = useState<Object3D>(new Object3D())
+  const [stepDirection] = useState<Vector3>(new Vector3())
+  const [stepAcceleration] = useState<Vector3>(new Vector3())
+  const [stepForce] = useState<Vector3>(new Vector3())
+  const [stepImpulse] = useState<Vector3>(new Vector3())
 
-  const vectorZ = useMemo<Vector3>(() => new Vector3(0, 0, 1), [])
+  const [vectorZ] = useState<Vector3>(new Vector3(0, 0, 1))
 
-  const bufferVector = useMemo<Vector3>(() => new Vector3(), [])
+  const [bufferVector] = useState<Vector3>(new Vector3())
 
   const setMovement = () => {
     if (!refRigidBody.current || !refModel.current) {
