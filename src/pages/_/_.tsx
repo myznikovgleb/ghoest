@@ -7,14 +7,12 @@ const _ = () => {
 
   return (
     <Layout>
-      <section className="flex flex-col items-center justify-center gap-16">
-        <h1 className="text-4xl font-thin tracking-widest text-base-content">
-          GHOEST
-        </h1>
-        <h2 className="animate-bounce text-6xl">👻</h2>
+      <section className="flex flex-col items-center justify-center gap-32">
+        <h1 className="text-4xl font-thin tracking-[0.5em]">GHOEST</h1>
+        <h2 className="text-8xl">👻</h2>
         <Link
           to={path}
-          className="btn btn-neutral btn-lg btn-wide text-2xl font-thin tracking-widest"
+          className="btn btn-primary btn-lg btn-wide text-2xl font-thin tracking-[0.5em]"
         >
           START
         </Link>
