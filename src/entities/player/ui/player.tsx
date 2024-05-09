@@ -28,11 +28,11 @@ const Player = () => {
 
   const [cameraPositionCoarse] = useState<Vector3>(new Vector3())
   const [cameraPositionSmooth] = useState<Vector3>(new Vector3())
-  const [cameraPositionShift] = useState<Vector3>(new Vector3(0, 0.75, 5.5))
+  const [cameraPositionShift] = useState<Vector3>(new Vector3(0, 1.0, 5.0))
 
   const [cameraTargetCoarse] = useState<Vector3>(new Vector3())
   const [cameraTargetSmooth] = useState<Vector3>(new Vector3())
-  const [cameraTargetShift] = useState<Vector3>(new Vector3(0, 1.0, 0))
+  const [cameraTargetShift] = useState<Vector3>(new Vector3(0, 0, 0))
 
   const [prevPosition] = useState<Vector3>(new Vector3())
   const [prevVelocity] = useState<Vector3>(new Vector3())
@@ -93,17 +93,7 @@ const Player = () => {
     }
   }
 
-  const setCamera = (camera: Camera) => {
-    cameraPositionCoarse.copy(prevPosition).add(cameraPositionShift)
-    cameraPositionSmooth.lerp(cameraPositionCoarse, FACTOR_CAMERA_SMOOTH)
-    camera.position.copy(cameraPositionCoarse)
-
-    cameraTargetCoarse.copy(prevPosition).add(cameraTargetShift)
-    cameraTargetSmooth.lerp(cameraTargetCoarse, FACTOR_CAMERA_SMOOTH)
-    // camera.lookAt(cameraTargetSmooth)
-  }
-
-  const step = (delta: number) => {
+  const stepMovement = (delta: number) => {
     if (!refRigidBody.current || !refModel.current) {
       return
     }
@@ -120,11 +110,29 @@ const Player = () => {
     refRigidBody.current.applyImpulse(stepImpulse, true)
   }
 
+  const setCamera = () => {
+    cameraPositionCoarse.copy(prevPosition).add(cameraPositionShift)
+
+    cameraTargetCoarse.copy(prevPosition).add(cameraTargetShift)
+  }
+
+  const stepCamera = (camera: Camera, delta: number) => {
+    cameraPositionSmooth.lerp(
+      cameraPositionCoarse,
+      delta * FACTOR_CAMERA_SMOOTH
+    )
+    camera.position.copy(cameraPositionCoarse)
+
+    cameraTargetSmooth.lerp(cameraTargetCoarse, delta * FACTOR_CAMERA_SMOOTH)
+    camera.lookAt(cameraTargetSmooth)
+  }
+
   useFrame((state, delta) => {
-    !isDebug && setCamera(state.camera)
+    !isDebug && setCamera()
     setMovement()
 
-    step(delta)
+    !isDebug && stepCamera(state.camera, delta)
+    stepMovement(delta)
   })
 
   return (
