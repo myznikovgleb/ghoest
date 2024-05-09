@@ -17,10 +17,10 @@ const TileSet = (props: TileSetProps) => {
 
   const [tileSet] = useState<TileType[][]>([
     ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'Y', 'G', 'G', 'G'],
     ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
+    ['G', 'G', 'G', 'Y', 'G'],
+    ['G', 'Y', 'G', 'G', 'G'],
   ])
 
   return (
