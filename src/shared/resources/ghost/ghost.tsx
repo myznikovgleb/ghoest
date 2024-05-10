@@ -6,7 +6,7 @@ import type { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    body: Mesh
+    ghost: Mesh
   }
   materials: {
     body: MeshStandardMaterial
@@ -22,7 +22,7 @@ const Ghost = forwardRef<Group, GhostProps>((props, ref) => {
 
   return (
     <group ref={ref} dispose={null} {...props}>
-      <mesh geometry={nodes.body.geometry} material={materials.body} />
+      <mesh geometry={nodes.ghost.geometry} material={materials.body} />
     </group>
   )
 })

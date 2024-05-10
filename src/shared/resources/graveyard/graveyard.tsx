@@ -5,15 +5,15 @@ import type { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    graveyard_ground: Mesh
-    graveyard_grave_001: Mesh
-    graveyard_grave_002: Mesh
-    graveyard_grave_003: Mesh
+    ground: Mesh
+    earth: Mesh
+    grave_001: Mesh
+    grave_002: Mesh
   }
   materials: {
     ground: MeshStandardMaterial
-    grave_light: MeshStandardMaterial
-    grave_dark: MeshStandardMaterial
+    earth: MeshStandardMaterial
+    grave: MeshStandardMaterial
   }
 }
 
@@ -30,28 +30,10 @@ const Graveyard = (props: GraveyardProps) => {
 
   return (
     <group dispose={null} position={position}>
-      <mesh
-        geometry={nodes.graveyard_ground.geometry}
-        material={materials.ground}
-      />
-      <mesh
-        geometry={nodes.graveyard_grave_001.geometry}
-        material={materials.grave_light}
-        position={[0.5, 0, -0.3]}
-        rotation={[0, 0.262, 0]}
-      />
-      <mesh
-        geometry={nodes.graveyard_grave_002.geometry}
-        material={materials.grave_light}
-        position={[-0.5, 0, -0.6]}
-        rotation={[0, -0.262, 0]}
-      />
-      <mesh
-        geometry={nodes.graveyard_grave_003.geometry}
-        material={materials.grave_dark}
-        position={[-0.1, 0, 0.2]}
-        rotation={[0, 0.436, 0]}
-      />
+      <mesh geometry={nodes.ground.geometry} material={materials.ground} />
+      <mesh geometry={nodes.earth.geometry} material={materials.earth} />
+      <mesh geometry={nodes.grave_001.geometry} material={materials.grave} />
+      <mesh geometry={nodes.grave_002.geometry} material={materials.grave} />
     </group>
   )
 }

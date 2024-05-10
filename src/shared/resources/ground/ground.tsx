@@ -6,14 +6,11 @@ import type { GLTF } from 'three-stdlib'
 type GLTFResult = GLTF & {
   nodes: {
     ground: Mesh
-    ground_tile_001: Mesh
-    ground_tile_002: Mesh
-    ground_tile_003: Mesh
-    ground_tile_004: Mesh
+    earth: Mesh
   }
   materials: {
     ground: MeshStandardMaterial
-    ground_tile: MeshStandardMaterial
+    earth: MeshStandardMaterial
   }
 }
 
@@ -29,22 +26,7 @@ const Ground = (props: GroundProps) => {
   return (
     <group dispose={null} position={position}>
       <mesh geometry={nodes.ground.geometry} material={materials.ground} />
-      <mesh
-        geometry={nodes.ground_tile_001.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_002.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_003.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_004.geometry}
-        material={materials.ground_tile}
-      />
+      <mesh geometry={nodes.earth.geometry} material={materials.earth} />
     </group>
   )
 }
