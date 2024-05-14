@@ -8,7 +8,7 @@ import { Map } from '@/entities/map'
 import { Player } from '@/entities/player'
 import { useIsDebug } from '@/shared/utils/hooks'
 
-const Content = () => {
+const ExperienceContent = () => {
   const isDebug = useIsDebug()
 
   const { camera } = useThree()
@@ -38,4 +38,4 @@ const Content = () => {
   )
 }
 
-export { Content }
+export { ExperienceContent }
