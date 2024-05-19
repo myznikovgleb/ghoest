@@ -121,7 +121,7 @@ const Player = () => {
       cameraPositionCoarse,
       delta * FACTOR_CAMERA_SMOOTH
     )
-    camera.position.copy(cameraPositionCoarse)
+    camera.position.copy(cameraPositionSmooth)
 
     cameraTargetSmooth.lerp(cameraTargetCoarse, delta * FACTOR_CAMERA_SMOOTH)
     camera.lookAt(cameraTargetSmooth)
