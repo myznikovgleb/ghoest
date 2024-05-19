@@ -28,7 +28,7 @@ const Player = () => {
 
   const [cameraPositionCoarse] = useState<Vector3>(new Vector3())
   const [cameraPositionSmooth] = useState<Vector3>(new Vector3())
-  const [cameraPositionShift] = useState<Vector3>(new Vector3(0, 1.0, 5.0))
+  const [cameraPositionShift] = useState<Vector3>(new Vector3(0, 4.0, 4.0))
 
   const [cameraTargetCoarse] = useState<Vector3>(new Vector3())
   const [cameraTargetSmooth] = useState<Vector3>(new Vector3())

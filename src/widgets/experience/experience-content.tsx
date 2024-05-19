@@ -13,7 +13,7 @@ const ExperienceContent = () => {
 
   const { camera } = useThree()
 
-  const [cameraPositionDebug] = useState(new Vector3(0, 2, 4))
+  const [cameraPositionDebug] = useState(new Vector3(0, 4, 4))
   const [cameraTargetDebug] = useState(new Vector3(0, 0, 0))
 
   useEffect(() => {
