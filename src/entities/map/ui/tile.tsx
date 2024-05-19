@@ -1,10 +1,9 @@
 import { match } from 'ts-pattern'
 
-import { Graveyard, Ground, Tree } from '@/shared/resources'
+import { Graveyard, Tree } from '@/shared/resources'
 
+import type { TileType } from '../model'
 import type { Vector3Tuple } from 'three'
-
-export type TileType = 'G' | 'T' | 'Y'
 
 interface TileProp {
   position: Vector3Tuple
@@ -15,7 +14,7 @@ const Tile = (props: TileProp) => {
   const { position, tileType } = props
 
   return match(tileType)
-    .with('G', () => <Ground position={position} />)
+    .with('G', () => null)
     .with('T', () => <Tree position={position} />)
     .with('Y', () => <Graveyard position={position} />)
     .exhaustive()

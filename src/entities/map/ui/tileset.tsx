@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { MathUtils } from 'three'
 
+import { generateTileset } from '../utils'
+
 import { Tile } from './tile'
 
-import type { TileType } from './tile'
+import type { TileType } from '../model'
 import type { ThreeEvent } from '@react-three/fiber'
+
+const TILESET_WIDTH = 25
+const TILESET_DEPTH = 25
 
 interface TileSetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void
@@ -15,13 +20,9 @@ interface TileSetProps {
 const TileSet = (props: TileSetProps) => {
   const { onPointerMove, onPointerDown, onPointerUp } = props
 
-  const [tileSet] = useState<TileType[][]>([
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'Y', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'Y', 'G'],
-    ['G', 'Y', 'G', 'G', 'G'],
-  ])
+  const [tileSet] = useState<TileType[][]>(
+    generateTileset(TILESET_WIDTH, TILESET_DEPTH)
+  )
 
   return (
     <group
@@ -29,6 +30,11 @@ const TileSet = (props: TileSetProps) => {
       onPointerDown={onPointerDown}
       onPointerOut={onPointerUp}
     >
+      <mesh position={[0, -0.1, 0]} scale={[TILESET_WIDTH, 1, TILESET_DEPTH]}>
+        <boxGeometry args={[2, 0.2, 2]} />
+        <meshBasicMaterial color="#93E14D" />
+      </mesh>
+
       {tileSet
         .map((tileLine, tileLineIndex) =>
           tileLine.map((tile, tileIndex) => (
