@@ -28,7 +28,7 @@ const TileSet = (props: TileSetProps) => {
     <group
       onPointerMove={onPointerMove}
       onPointerDown={onPointerDown}
-      onPointerOut={onPointerUp}
+      onPointerUp={onPointerUp}
     >
       <mesh position={[0, -0.1, 0]} scale={[TILESET_WIDTH, 1, TILESET_DEPTH]}>
         <boxGeometry args={[2, 0.2, 2]} />

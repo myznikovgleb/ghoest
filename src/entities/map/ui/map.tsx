@@ -7,7 +7,7 @@ import { Pointer } from './pointer'
 import { TileSet } from './tileset'
 
 import type { ThreeEvent } from '@react-three/fiber'
-import type { Mesh } from 'three'
+import type { Mesh, Vector3 } from 'three'
 
 const Map = () => {
   const setPosition = usePlayerStore((state) => state.setPosition)
@@ -16,15 +16,19 @@ const Map = () => {
 
   const [pointerOpacity, setPointerOpacity] = useState<number>(0.75)
 
-  const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
+  const setPointerPosition = (point: Vector3) => {
     if (!refPointer.current) {
       return
     }
 
-    const { point } = event
-
     refPointer.current.position.x = point.x
     refPointer.current.position.z = point.z
+  }
+
+  const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
+    const { point } = event
+
+    setPointerPosition(point)
   }
 
   const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
@@ -32,6 +36,7 @@ const Map = () => {
 
     setPointerOpacity(1.0)
 
+    setPointerPosition(point)
     setPosition([point.x, point.y, point.z])
   }
 
