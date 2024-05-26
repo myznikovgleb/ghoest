@@ -1,4 +1,4 @@
-import { Environment, OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import { Physics } from '@react-three/rapier'
 import { useEffect, useState } from 'react'
@@ -26,8 +26,6 @@ const ExperienceContent = () => {
 
   return (
     <>
-      <Environment preset="city" />
-
       {isDebug && <OrbitControls />}
 
       <Physics debug={isDebug}>

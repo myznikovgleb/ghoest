@@ -1,35 +1,35 @@
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
+import { forwardRef } from 'react'
 
-import type { Mesh, MeshStandardMaterial, Vector3Tuple } from 'three'
+import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    grave_001: Mesh
+    grave: Mesh
   }
-  materials: {
-    grave: MeshStandardMaterial
-  }
+  materials: Record<string, never>
 }
 
 interface GraveyardProps {
   position?: Vector3Tuple
 }
 
-const Graveyard = (props: GraveyardProps) => {
-  const { position = [0, 0, 0] } = props
+const Graveyard = forwardRef<Group, GraveyardProps>((props, ref) => {
+  const { nodes } = useGLTF('./experience/graveyard.glb') as GLTFResult
 
-  const { nodes, materials } = useGLTF(
-    './experience/graveyard.glb'
-  ) as GLTFResult
+  const matcapRock = useTexture('./experience/matcap_rock.png')
 
   return (
-    <group dispose={null} position={position}>
-      <mesh geometry={nodes.grave_001.geometry} material={materials.grave} />
+    <group ref={ref} dispose={null} {...props}>
+      <mesh geometry={nodes.grave.geometry}>
+        <meshMatcapMaterial matcap={matcapRock} />
+      </mesh>
     </group>
   )
-}
+})
 
 useGLTF.preload('./experience/graveyard.glb')
+useTexture.preload('./experience/matcap_rock.png')
 
 export { Graveyard }

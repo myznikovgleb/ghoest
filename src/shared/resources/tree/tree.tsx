@@ -1,18 +1,15 @@
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
 
-import type { Group, Mesh, MeshStandardMaterial, Vector3Tuple } from 'three'
+import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    tree_1: Mesh
-    tree_2: Mesh
+    tree_bottom: Mesh
+    tree_top: Mesh
   }
-  materials: {
-    wood: MeshStandardMaterial
-    ground: MeshStandardMaterial
-  }
+  materials: Record<string, never>
 }
 
 interface TreeProps {
@@ -20,16 +17,25 @@ interface TreeProps {
 }
 
 const Tree = forwardRef<Group, TreeProps>((props, ref) => {
-  const { nodes, materials } = useGLTF('experience/tree.glb') as GLTFResult
+  const { nodes } = useGLTF('./experience/tree.glb') as GLTFResult
+
+  const matcapLeaves = useTexture('./experience/matcap_leaves.png')
+  const matcapWood = useTexture('./experience/matcap_wood.png')
 
   return (
     <group ref={ref} dispose={null} {...props}>
-      <mesh geometry={nodes.tree_1.geometry} material={materials.wood} />
-      <mesh geometry={nodes.tree_2.geometry} material={materials.ground} />
+      <mesh geometry={nodes.tree_bottom.geometry}>
+        <meshMatcapMaterial matcap={matcapWood} />
+      </mesh>
+      <mesh geometry={nodes.tree_top.geometry}>
+        <meshMatcapMaterial matcap={matcapLeaves} />
+      </mesh>
     </group>
   )
 })
 
-useGLTF.preload('experience/tree.glb')
+useGLTF.preload('./experience/tree.glb')
+useTexture.preload('./experience/matcap_leaves.png')
+useTexture.preload('./experience/matcap_wood.png')
 
 export { Tree }
