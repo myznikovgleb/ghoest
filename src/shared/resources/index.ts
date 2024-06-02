@@ -1,4 +1,7 @@
+export * from './fence-corner'
+export * from './fence-straight'
 export * from './ghost'
 export * from './graveyard'
 export * from './ground'
+export * from './pumpkin'
 export * from './tree'

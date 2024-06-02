@@ -13,6 +13,7 @@ type GLTFResult = GLTF & {
 
 interface GraveyardProps {
   position?: Vector3Tuple
+  rotation?: Vector3Tuple
 }
 
 const Graveyard = forwardRef<Group, GraveyardProps>((props, ref) => {

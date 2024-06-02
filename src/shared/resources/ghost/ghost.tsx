@@ -13,6 +13,7 @@ type GLTFResult = GLTF & {
 
 interface GhostProps {
   position?: Vector3Tuple
+  rotation?: Vector3Tuple
 }
 
 const Ghost = forwardRef<Group, GhostProps>((props, ref) => {

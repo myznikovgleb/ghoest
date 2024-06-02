@@ -6,37 +6,37 @@ import type { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    tree_bottom: Mesh
-    tree_top: Mesh
+    pumpkin_body: Mesh
+    pumpkin_tail: Mesh
   }
   materials: Record<string, never>
 }
 
-interface TreeProps {
+interface PumpkinProps {
   position?: Vector3Tuple
   rotation?: Vector3Tuple
 }
 
-const Tree = forwardRef<Group, TreeProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/tree.glb') as GLTFResult
+const Pumpkin = forwardRef<Group, PumpkinProps>((props, ref) => {
+  const { nodes } = useGLTF('./experience/pumpkin.glb') as GLTFResult
 
+  const matcapPumpkin = useTexture('./experience/matcap_pumpkin.png')
   const matcapLeaves = useTexture('./experience/matcap_leaves.png')
-  const matcapWood = useTexture('./experience/matcap_wood.png')
 
   return (
     <group ref={ref} dispose={null} {...props}>
-      <mesh geometry={nodes.tree_bottom.geometry}>
-        <meshMatcapMaterial matcap={matcapWood} />
+      <mesh geometry={nodes.pumpkin_body.geometry}>
+        <meshMatcapMaterial matcap={matcapPumpkin} />
       </mesh>
-      <mesh geometry={nodes.tree_top.geometry}>
+      <mesh geometry={nodes.pumpkin_tail.geometry}>
         <meshMatcapMaterial matcap={matcapLeaves} />
       </mesh>
     </group>
   )
 })
 
-useGLTF.preload('./experience/tree.glb')
+useGLTF.preload('./experience/pumpkin.glb')
+useTexture.preload('./experience/matcap_pumpkin.png')
 useTexture.preload('./experience/matcap_leaves.png')
-useTexture.preload('./experience/matcap_wood.png')
 
-export { Tree }
+export { Pumpkin }

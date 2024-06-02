@@ -19,11 +19,23 @@ const generateTileset = (width: number, depth: number): TileType[][] => {
 
       switch (tileIndex) {
         case 0: {
-          tileLine[j] = 'Y'
+          tileLine[j] = 'P'
           break
         }
         case 1: {
           tileLine[j] = 'T'
+          break
+        }
+        case 2: {
+          tileLine[j] = 'Y'
+          break
+        }
+        case 3: {
+          tileLine[j] = 'N'
+          break
+        }
+        case 4: {
+          tileLine[j] = 'NE'
           break
         }
         default: {
