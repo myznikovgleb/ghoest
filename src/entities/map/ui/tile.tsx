@@ -24,8 +24,30 @@ const Tile = (props: TileProp) => {
     .with('P', () => <Pumpkin position={position} />)
     .with('T', () => <Tree position={position} />)
     .with('Y', () => <Graveyard position={position} />)
-    .with('NE', 'SE', 'SW', 'NW', () => <FenceCorner position={position} />)
-    .with('N', 'E', 'S', 'W', () => <FenceStraight position={position} />)
+    .with('NW', () => (
+      <FenceCorner position={position} rotation={[0, 0 * Math.PI * 0.5, 0]} />
+    ))
+    .with('NE', () => (
+      <FenceCorner position={position} rotation={[0, 3 * Math.PI * 0.5, 0]} />
+    ))
+    .with('SE', () => (
+      <FenceCorner position={position} rotation={[0, 2 * Math.PI * 0.5, 0]} />
+    ))
+    .with('SW', () => (
+      <FenceCorner position={position} rotation={[0, 1 * Math.PI * 0.5, 0]} />
+    ))
+    .with('N', () => (
+      <FenceStraight position={position} rotation={[0, 0 * Math.PI * 0.5, 0]} />
+    ))
+    .with('E', () => (
+      <FenceStraight position={position} rotation={[0, 3 * Math.PI * 0.5, 0]} />
+    ))
+    .with('S', () => (
+      <FenceStraight position={position} rotation={[0, 2 * Math.PI * 0.5, 0]} />
+    ))
+    .with('W', () => (
+      <FenceStraight position={position} rotation={[0, 1 * Math.PI * 0.5, 0]} />
+    ))
     .exhaustive()
 }
 

@@ -17,7 +17,7 @@ const Ground = forwardRef<Group, GroundProps>((props, ref) => {
   return (
     <group ref={ref}>
       <mesh scale={scale} position={[0, -0.1, 0]}>
-        <boxGeometry args={[2, 0.2, 2]} />
+        <boxGeometry args={[1, 0.2, 1]} />
         <meshMatcapMaterial matcap={matcapGrass} />
       </mesh>
 

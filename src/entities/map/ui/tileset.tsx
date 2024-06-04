@@ -10,8 +10,7 @@ import { Tile } from './tile'
 import type { TileType } from '../model'
 import type { ThreeEvent } from '@react-three/fiber'
 
-const TILESET_WIDTH = 30
-const TILESET_DEPTH = 30
+const TILESET_WIDTH = 50
 
 interface TileSetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void
@@ -22,9 +21,7 @@ interface TileSetProps {
 const TileSet = (props: TileSetProps) => {
   const { onPointerMove, onPointerDown, onPointerUp } = props
 
-  const [tileSet] = useState<TileType[][]>(
-    generateTileset(TILESET_WIDTH, TILESET_DEPTH)
-  )
+  const [tileSet] = useState<TileType[][]>(generateTileset(TILESET_WIDTH))
 
   return (
     <group
@@ -32,7 +29,7 @@ const TileSet = (props: TileSetProps) => {
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
     >
-      <Ground scale={[TILESET_WIDTH, 1, TILESET_DEPTH]} />
+      <Ground scale={[TILESET_WIDTH, 1, TILESET_WIDTH]} />
 
       {tileSet
         .map((tileLine, tileLineIndex) =>
@@ -41,9 +38,9 @@ const TileSet = (props: TileSetProps) => {
               key={MathUtils.generateUUID()}
               tileType={tile}
               position={[
-                tileIndex * 2 - tileLine.length + 1,
+                tileIndex - tileLine.length * 0.5 + 0.5,
                 0,
-                tileLineIndex * 2 - tileSet.length + 1,
+                tileLineIndex - tileSet.length * 0.5 + 0.5,
               ]}
             />
           ))
