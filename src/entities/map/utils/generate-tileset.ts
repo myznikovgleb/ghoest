@@ -14,10 +14,18 @@ const generateTileset = (width: number): TileType[][] => {
     for (let j = 0; j < width; j++) {
       if (isCenterTile(i, j, centerSet)) {
         tileLine[j] = 'G'
-        break
+        continue
       }
 
-      const tileIndex = Math.floor(Math.random() * 20)
+      /**
+       * Parse tileset
+       */
+      if (isPartiallyEvenTile(i, j)) {
+        tileLine[j] = 'G'
+        continue
+      }
+
+      const tileIndex = Math.floor(Math.random() * 10)
 
       switch (tileIndex) {
         case 0: {
@@ -61,6 +69,10 @@ const generateTileset = (width: number): TileType[][] => {
   }
 
   return tileset
+}
+
+const isPartiallyEvenTile = (i: number, j: number): boolean => {
+  return i % 2 === 0 || j % 2 === 0
 }
 
 const isCenterTile = (
