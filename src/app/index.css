@@ -4,9 +4,11 @@
 
 @layer base {
   * {
-    cursor: pointer;
-
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  body {
+    cursor: pointer;
   }
 }

@@ -4,7 +4,7 @@ import { ExperienceContent } from './experience-content'
 
 const ExperienceWrapper = () => {
   return (
-    <Canvas flat className="cursor-pointer">
+    <Canvas flat className="cursor-none">
       <ExperienceContent />
     </Canvas>
   )
