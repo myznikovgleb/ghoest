@@ -1,3 +1,4 @@
+export * from './coffin'
 export * from './fence-corner'
 export * from './fence-straight'
 export * from './ghost'

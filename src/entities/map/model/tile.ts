@@ -7,6 +7,7 @@ export type TileType =
   | 'SW'
   | 'W'
   | 'NW'
+  | 'C'
   | 'G'
   | 'P'
   | 'T'

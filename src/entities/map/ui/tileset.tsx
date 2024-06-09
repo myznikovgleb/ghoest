@@ -10,7 +10,7 @@ import { Tile } from './tile'
 import type { TileType } from '../model'
 import type { ThreeEvent } from '@react-three/fiber'
 
-const TILESET_WIDTH = 50
+const TILESET_WIDTH = 55
 
 interface TileSetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void

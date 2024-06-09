@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern'
 
 import {
+  Coffin,
   FenceCorner,
   FenceStraight,
   Graveyard,
@@ -21,6 +22,7 @@ const Tile = (props: TileProp) => {
 
   return match(tileType)
     .with('G', () => null)
+    .with('C', () => <Coffin position={position} />)
     .with('P', () => <Pumpkin position={position} />)
     .with('T', () => <Tree position={position} />)
     .with('Y', () => <Graveyard position={position} />)

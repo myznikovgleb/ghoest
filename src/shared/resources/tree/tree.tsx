@@ -21,12 +21,12 @@ const Tree = forwardRef<Group, TreeProps>((props, ref) => {
   const { nodes } = useGLTF('./experience/tree.glb') as GLTFResult
 
   const matcapLeaves = useTexture('./experience/matcap_leaves.png')
-  const matcapWood = useTexture('./experience/matcap_wood.png')
+  const matcapTrunk = useTexture('./experience/matcap_wood.png')
 
   return (
     <group ref={ref} dispose={null} {...props}>
       <mesh geometry={nodes.tree_bottom.geometry}>
-        <meshMatcapMaterial matcap={matcapWood} />
+        <meshMatcapMaterial matcap={matcapTrunk} />
       </mesh>
       <mesh geometry={nodes.tree_top.geometry}>
         <meshMatcapMaterial matcap={matcapLeaves} />
