@@ -8,9 +8,13 @@ const ExperienceDebug = () => {
     useControls(
       'Debug options',
       {
-        isDebugPhysics: { value: false, label: 'Is physics in debug mode' },
-        isEnabledControls: { value: false, label: 'Is controls enabled' },
-        isStickedCamera: { value: false, label: 'Is camera sticked' },
+        isDebugPhysics: { value: true, label: 'Is physics in debug mode' },
+        isStickedCamera: { value: true, label: 'Is camera sticked' },
+        isEnabledControls: {
+          value: true,
+          label: 'Is controls enabled',
+          render: (get) => get('Debug options.isStickedCamera'),
+        },
         isHiddenPerf: { value: false, label: 'Is perf hidden' },
       },
       {
