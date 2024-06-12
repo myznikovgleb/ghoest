@@ -4,7 +4,6 @@ import { useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 import { Ghost } from '@/shared/resources'
-import { useIsDebug } from '@/shared/utils/hooks'
 import { approximatelyEqual } from '@/shared/utils/math'
 
 import { usePlayerStore } from '..'
@@ -17,11 +16,15 @@ const FACTOR_VELOCITY = 10
 const FACTOR_FORCE_DAMPING = 0.5
 const FACTOR_CAMERA_SMOOTH = 5
 
-const Player = () => {
+interface PlayerProps {
+  isStickedCamera?: boolean
+}
+
+const Player = (props: PlayerProps) => {
   const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
   const nextPositionSerialized = usePlayerStore((state) => state.position)
 
-  const isDebug = useIsDebug()
+  const { isStickedCamera = false } = props
 
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
@@ -128,10 +131,10 @@ const Player = () => {
   }
 
   useFrame((state, delta) => {
-    !isDebug && setCamera()
+    !isStickedCamera && setCamera()
     setMovement()
 
-    !isDebug && stepCamera(state.camera, delta)
+    !isStickedCamera && stepCamera(state.camera, delta)
     stepMovement(delta)
   })
 
