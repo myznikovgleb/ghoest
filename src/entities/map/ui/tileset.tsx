@@ -1,51 +1,51 @@
-import { useState } from 'react'
+import { RigidBody } from '@react-three/rapier'
+import { memo, useState } from 'react'
 import { MathUtils } from 'three'
+
+import { Ground } from '@/shared/resources'
+
+import { generateTileset } from '../utils'
 
 import { Tile } from './tile'
 
-import type { TileType } from './tile'
+import type { TileType } from '../model'
 import type { ThreeEvent } from '@react-three/fiber'
 
-interface TileSetProps {
+const TILESET_WIDTH = 55
+
+interface TilesetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void
-  onPointerUp: (event: ThreeEvent<PointerEvent>) => void
 }
 
-const TileSet = (props: TileSetProps) => {
-  const { onPointerMove, onPointerDown, onPointerUp } = props
+const Tileset = memo((props: TilesetProps) => {
+  const { onPointerMove, onPointerDown } = props
 
-  const [tileSet] = useState<TileType[][]>([
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-    ['G', 'G', 'G', 'G', 'G'],
-  ])
+  const [tileset] = useState<TileType[][]>(generateTileset(TILESET_WIDTH))
 
   return (
-    <group
-      onPointerMove={onPointerMove}
-      onPointerDown={onPointerDown}
-      onPointerOut={onPointerUp}
-    >
-      {tileSet
-        .map((tileLine, tileLineIndex) =>
-          tileLine.map((tile, tileIndex) => (
-            <Tile
-              key={MathUtils.generateUUID()}
-              tileType={tile}
-              position={[
-                tileIndex * 2 - tileLine.length + 1,
-                0,
-                tileLineIndex * 2 - tileSet.length + 1,
-              ]}
-            />
-          ))
-        )
-        .flat()}
-    </group>
-  )
-}
+    <RigidBody type="fixed">
+      <group onPointerMove={onPointerMove} onPointerUp={onPointerDown}>
+        <Ground scale={TILESET_WIDTH} />
 
-export { TileSet }
+        {tileset
+          .map((row, rowIndex) =>
+            row.map((tile, tileIndex) => (
+              <Tile
+                key={MathUtils.generateUUID()}
+                tileType={tile}
+                position={[
+                  tileIndex - row.length * 0.5 + 0.5,
+                  0,
+                  rowIndex - tileset.length * 0.5 + 0.5,
+                ]}
+              />
+            ))
+          )
+          .flat()}
+      </group>
+    </RigidBody>
+  )
+})
+
+export { Tileset }

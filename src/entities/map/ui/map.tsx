@@ -1,51 +1,60 @@
-import { RigidBody } from '@react-three/rapier'
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { usePlayerStore } from '@/entities/player'
 
 import { Pointer } from './pointer'
-import { TileSet } from './tileset'
+import { Tileset } from './tileset'
 
 import type { ThreeEvent } from '@react-three/fiber'
-import type { Vector3Tuple } from 'three'
+import type { Group, Vector3 } from 'three'
 
 const Map = () => {
   const setPosition = usePlayerStore((state) => state.setPosition)
 
-  const [pointerPosition, setPointerPosition] = useState<Vector3Tuple>([
-    0, 0, 0,
-  ])
-  const [pointerOpacity, setPointerOpacity] = useState<number>(0.75)
+  const [isCursorMoved, setIsCursorMoved] = useState<boolean>(false)
 
-  const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
-    const { point } = event
+  const refPointerTarget = useRef<Group>(null)
+  const refPointerShadow = useRef<Group>(null)
 
-    setPointerPosition([point.x, point.y, point.z])
+  const setPointerPosition = (point: Vector3, pointer: Group | null) => {
+    if (!pointer) {
+      return
+    }
+
+    pointer.position.x = point.x
+    pointer.position.z = point.z
   }
 
-  const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
-    const { point } = event
+  const onPointerMove = useCallback((event: ThreeEvent<PointerEvent>) => {
+    const { point, pointerType } = event
 
-    setPointerOpacity(1.0)
-    setPointerPosition([point.x, point.y, point.z])
+    if (pointerType !== 'mouse') {
+      return
+    }
 
-    setPosition([point.x, point.y, point.z])
-  }
+    setIsCursorMoved(true)
 
-  const onPointerUp = () => {
-    setPointerOpacity(0.75)
-  }
+    setPointerPosition(point, refPointerShadow.current)
+  }, [])
+
+  const onPointerDown = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      const { point } = event
+
+      setPointerPosition(point, refPointerTarget.current)
+      setPosition([point.x, point.y, point.z])
+    },
+    [setPosition]
+  )
 
   return (
     <group>
-      <Pointer position={pointerPosition} opacity={pointerOpacity} />
-      <RigidBody type="fixed">
-        <TileSet
-          onPointerMove={onPointerMove}
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-        />
-      </RigidBody>
+      <Pointer ref={refPointerTarget} isPulsing />
+      {isCursorMoved && (
+        <Pointer ref={refPointerShadow} isPartiallyTransparent />
+      )}
+
+      <Tileset onPointerMove={onPointerMove} onPointerDown={onPointerDown} />
     </group>
   )
 }

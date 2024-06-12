@@ -1,4 +1,4 @@
-import { Environment, OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import { Physics } from '@react-three/rapier'
 import { useEffect, useState } from 'react'
@@ -8,12 +8,12 @@ import { Map } from '@/entities/map'
 import { Player } from '@/entities/player'
 import { useIsDebug } from '@/shared/utils/hooks'
 
-const Content = () => {
+const ExperienceContent = () => {
   const isDebug = useIsDebug()
 
   const { camera } = useThree()
 
-  const [cameraPositionDebug] = useState(new Vector3(0, 2, 4))
+  const [cameraPositionDebug] = useState(new Vector3(0, 4, 4))
   const [cameraTargetDebug] = useState(new Vector3(0, 0, 0))
 
   useEffect(() => {
@@ -26,8 +26,6 @@ const Content = () => {
 
   return (
     <>
-      <Environment preset="city" />
-
       {isDebug && <OrbitControls />}
 
       <Physics debug={isDebug}>
@@ -38,4 +36,4 @@ const Content = () => {
   )
 }
 
-export { Content }
+export { ExperienceContent }

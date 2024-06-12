@@ -1,8 +1,12 @@
 # Ghoest app
 
-Ghoest app is an RPG app significantly charged with dark magic.
+[Ghoest app](https://ghoest.vercel.app "Ghoest app") is an RPG app significantly charged with dark magic.
 
-## Details
+## How to run
+
+Follow [link](https://ghoest.vercel.app "Run Ghoest app") to give a try.
+
+## Tech details
 
 :scroll: Built with React Three Fiber, Rapier, Zustand and other great tools.
 

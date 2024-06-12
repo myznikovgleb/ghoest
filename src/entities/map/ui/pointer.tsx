@@ -1,24 +1,61 @@
-import { Vector3Tuple } from 'three'
+import { useTexture } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { forwardRef, useRef } from 'react'
+
+import type { Group } from 'three'
 
 const POINTER_ELEVATION = 0.02
 
 interface PointerProps {
-  position: Vector3Tuple
-  opacity?: number
+  isPartiallyTransparent?: boolean
+  isPulsing?: boolean
 }
 
-const Pointer = (props: PointerProps) => {
-  const { position, opacity = 1.0 } = props
+const Pointer = forwardRef<Group, PointerProps>((props, refExternal) => {
+  const { isPartiallyTransparent = false, isPulsing = false } = props
+
+  const refInternal = useRef<Group>(null)
+
+  const matcapPointer = useTexture('./experience/matcap_pointer.png')
+
+  const pulsingAnimation = (elapsedTime: number) => {
+    if (!refInternal.current) {
+      return
+    }
+
+    const phi = (elapsedTime % 1) * 2 * Math.PI
+
+    const scaleUnit = (Math.sin(phi) + 1) * 0.5
+    const scale = scaleUnit * 0.5 + 1
+
+    refInternal.current.scale.x = scale
+    refInternal.current.scale.z = scale
+  }
+
+  useFrame((state) => {
+    if (isPulsing) {
+      pulsingAnimation(state.clock.elapsedTime)
+    }
+  })
 
   return (
-    <mesh
-      position={[position[0], POINTER_ELEVATION, position[2]]}
-      rotation-x={-Math.PI / 2}
-    >
-      <ringGeometry args={[0.1, 0.2]} />
-      <meshStandardMaterial opacity={opacity} transparent />
-    </mesh>
+    <group ref={refExternal}>
+      <group ref={refInternal}>
+        <group position={[0, POINTER_ELEVATION, 0]} scale={[0.15, 1, 0.15]}>
+          <mesh rotation-x={-Math.PI / 2}>
+            <ringGeometry />
+            <meshMatcapMaterial
+              matcap={matcapPointer}
+              transparent={isPartiallyTransparent}
+              opacity={isPartiallyTransparent ? 0.5 : 1.0}
+            />
+          </mesh>
+        </group>
+      </group>
+    </group>
   )
-}
+})
+
+useTexture.preload('./experience/matcap_pointer.png')
 
 export { Pointer }

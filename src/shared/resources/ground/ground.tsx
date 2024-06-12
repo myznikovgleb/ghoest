@@ -1,54 +1,38 @@
-import { useGLTF } from '@react-three/drei'
+import { ContactShadows, useTexture } from '@react-three/drei'
+import { forwardRef } from 'react'
 
-import type { Mesh, MeshStandardMaterial, Vector3Tuple } from 'three'
-import type { GLTF } from 'three-stdlib'
-
-type GLTFResult = GLTF & {
-  nodes: {
-    ground: Mesh
-    ground_tile_001: Mesh
-    ground_tile_002: Mesh
-    ground_tile_003: Mesh
-    ground_tile_004: Mesh
-  }
-  materials: {
-    ground: MeshStandardMaterial
-    ground_tile: MeshStandardMaterial
-  }
-}
+import type { Group } from 'three'
 
 interface GroundProps {
-  position?: Vector3Tuple
+  scale?: number
 }
 
-const Ground = (props: GroundProps) => {
-  const { position = [0, 0, 0] } = props
+const CONTACT_SHADOWS_OFFSET = 0.01
 
-  const { nodes, materials } = useGLTF('./experience/ground.glb') as GLTFResult
+const Ground = forwardRef<Group, GroundProps>((props, ref) => {
+  const { scale = 1 } = props
+
+  const matcapGrass = useTexture('./experience/matcap_grass.png')
 
   return (
-    <group dispose={null} position={position}>
-      <mesh geometry={nodes.ground.geometry} material={materials.ground} />
-      <mesh
-        geometry={nodes.ground_tile_001.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_002.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_003.geometry}
-        material={materials.ground_tile}
-      />
-      <mesh
-        geometry={nodes.ground_tile_004.geometry}
-        material={materials.ground_tile}
+    <group ref={ref}>
+      <mesh scale={[scale, 1, scale]} position={[0, -0.1, 0]}>
+        <boxGeometry args={[1, 0.2, 1]} />
+        <meshMatcapMaterial matcap={matcapGrass} />
+      </mesh>
+
+      <ContactShadows
+        scale={scale}
+        blur={30 / scale}
+        resolution={1024}
+        near={-CONTACT_SHADOWS_OFFSET}
+        position={[0, CONTACT_SHADOWS_OFFSET, 0]}
+        opacity={0.5}
       />
     </group>
   )
-}
+})
 
-useGLTF.preload('./experience/ground.glb')
+useTexture.preload('./experience/matcap_grass.png')
 
 export { Ground }
