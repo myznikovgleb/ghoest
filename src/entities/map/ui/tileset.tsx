@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { RigidBody } from '@react-three/rapier'
+import { memo, useState } from 'react'
 import { MathUtils } from 'three'
 
 import { Ground } from '@/shared/resources'
@@ -12,42 +13,39 @@ import type { ThreeEvent } from '@react-three/fiber'
 
 const TILESET_WIDTH = 55
 
-interface TileSetProps {
+interface TilesetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void
-  onPointerUp: (event: ThreeEvent<PointerEvent>) => void
 }
 
-const TileSet = (props: TileSetProps) => {
-  const { onPointerMove, onPointerDown, onPointerUp } = props
+const Tileset = memo((props: TilesetProps) => {
+  const { onPointerMove, onPointerDown } = props
 
-  const [tileSet] = useState<TileType[][]>(generateTileset(TILESET_WIDTH))
+  const [tileset] = useState<TileType[][]>(generateTileset(TILESET_WIDTH))
 
   return (
-    <group
-      onPointerMove={onPointerMove}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-    >
-      <Ground scale={[TILESET_WIDTH, 1, TILESET_WIDTH]} />
+    <RigidBody type="fixed">
+      <group onPointerMove={onPointerMove} onPointerUp={onPointerDown}>
+        <Ground scale={TILESET_WIDTH} />
 
-      {tileSet
-        .map((tileLine, tileLineIndex) =>
-          tileLine.map((tile, tileIndex) => (
-            <Tile
-              key={MathUtils.generateUUID()}
-              tileType={tile}
-              position={[
-                tileIndex - tileLine.length * 0.5 + 0.5,
-                0,
-                tileLineIndex - tileSet.length * 0.5 + 0.5,
-              ]}
-            />
-          ))
-        )
-        .flat()}
-    </group>
+        {tileset
+          .map((row, rowIndex) =>
+            row.map((tile, tileIndex) => (
+              <Tile
+                key={MathUtils.generateUUID()}
+                tileType={tile}
+                position={[
+                  tileIndex - row.length * 0.5 + 0.5,
+                  0,
+                  rowIndex - tileset.length * 0.5 + 0.5,
+                ]}
+              />
+            ))
+          )
+          .flat()}
+      </group>
+    </RigidBody>
   )
-}
+})
 
-export { TileSet }
+export { Tileset }

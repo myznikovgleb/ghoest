@@ -7,18 +7,19 @@ import type { Group } from 'three'
 const POINTER_ELEVATION = 0.02
 
 interface PointerProps {
+  isPartiallyTransparent?: boolean
   isPulsing?: boolean
 }
 
-const Pointer = forwardRef<Group, PointerProps>((props, ref) => {
-  const { isPulsing = true } = props
+const Pointer = forwardRef<Group, PointerProps>((props, refExternal) => {
+  const { isPartiallyTransparent = false, isPulsing = false } = props
 
-  const refGroup = useRef<Group>(null)
+  const refInternal = useRef<Group>(null)
 
   const matcapPointer = useTexture('./experience/matcap_pointer.png')
 
   const pulsingAnimation = (elapsedTime: number) => {
-    if (!refGroup.current) {
+    if (!refInternal.current) {
       return
     }
 
@@ -27,8 +28,8 @@ const Pointer = forwardRef<Group, PointerProps>((props, ref) => {
     const scaleUnit = (Math.sin(phi) + 1) * 0.5
     const scale = scaleUnit * 0.5 + 1
 
-    refGroup.current.scale.x = scale
-    refGroup.current.scale.z = scale
+    refInternal.current.scale.x = scale
+    refInternal.current.scale.z = scale
   }
 
   useFrame((state) => {
@@ -38,12 +39,16 @@ const Pointer = forwardRef<Group, PointerProps>((props, ref) => {
   })
 
   return (
-    <group ref={ref}>
-      <group ref={refGroup}>
+    <group ref={refExternal}>
+      <group ref={refInternal}>
         <group position={[0, POINTER_ELEVATION, 0]} scale={[0.15, 1, 0.15]}>
           <mesh rotation-x={-Math.PI / 2}>
             <ringGeometry />
-            <meshMatcapMaterial matcap={matcapPointer} />
+            <meshMatcapMaterial
+              matcap={matcapPointer}
+              transparent={isPartiallyTransparent}
+              opacity={isPartiallyTransparent ? 0.5 : 1.0}
+            />
           </mesh>
         </group>
       </group>
