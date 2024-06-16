@@ -143,7 +143,7 @@ const Player = (props: PlayerProps) => {
       ref={refRigidBody}
       colliders={false}
       lockRotations
-      position={[0, capsuleCollider.halfHeight * 4, 0]}
+      position={[0, capsuleCollider.halfHeight + capsuleCollider.radius, 0]}
     >
       <CapsuleCollider
         args={[capsuleCollider.halfHeight, capsuleCollider.radius]}

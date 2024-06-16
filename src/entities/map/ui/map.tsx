@@ -37,7 +37,7 @@ const Map = () => {
     setPointerPosition(point, refPointerShadow.current)
   }, [])
 
-  const onPointerDown = useCallback(
+  const onPointerUp = useCallback(
     (event: ThreeEvent<PointerEvent>) => {
       const { point } = event
 
@@ -54,7 +54,7 @@ const Map = () => {
         <Pointer ref={refPointerShadow} isPartiallyTransparent />
       )}
 
-      <Tileset onPointerMove={onPointerMove} onPointerDown={onPointerDown} />
+      <Tileset onPointerMove={onPointerMove} onPointerUp={onPointerUp} />
     </group>
   )
 }
