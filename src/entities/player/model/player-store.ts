@@ -4,7 +4,7 @@ import type { Vector3Tuple } from 'three'
 
 interface InitialState {
   position: Vector3Tuple
-  capsuleCollider: { halfHeight: number; radius: number }
+  collider: { halfHeight: number; radius: number }
 }
 
 interface PlayerState extends InitialState {
@@ -12,7 +12,7 @@ interface PlayerState extends InitialState {
 }
 
 const initialState: InitialState = {
-  capsuleCollider: { halfHeight: 0.4, radius: 0.3 },
+  collider: { halfHeight: 0.4, radius: 0.3 },
   position: [0, 0, 0],
 }
 

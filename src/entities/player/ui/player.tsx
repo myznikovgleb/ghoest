@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { CapsuleCollider, RigidBody } from '@react-three/rapier'
+import { RigidBody } from '@react-three/rapier'
 import { useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
@@ -21,7 +21,7 @@ interface PlayerProps {
 }
 
 const Player = (props: PlayerProps) => {
-  const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
+  const collider = usePlayerStore((state) => state.collider)
   const nextPositionSerialized = usePlayerStore((state) => state.position)
 
   const { isStickedCamera = false } = props
@@ -101,7 +101,7 @@ const Player = (props: PlayerProps) => {
       return
     }
 
-    const hasSpaceToMove = diffPosition.length() > capsuleCollider.radius * 1.5
+    const hasSpaceToMove = diffPosition.length() > collider.radius * 1.5
     if (!hasSpaceToMove) {
       return
     }
@@ -139,16 +139,8 @@ const Player = (props: PlayerProps) => {
   })
 
   return (
-    <RigidBody
-      ref={refRigidBody}
-      colliders={false}
-      lockRotations
-      position={[0, capsuleCollider.halfHeight + capsuleCollider.radius, 0]}
-    >
-      <CapsuleCollider
-        args={[capsuleCollider.halfHeight, capsuleCollider.radius]}
-      />
-      <Ghost ref={refModel} position={[0, -capsuleCollider.halfHeight, 0]} />
+    <RigidBody ref={refRigidBody} colliders="cuboid" lockRotations>
+      <Ghost ref={refModel} />
     </RigidBody>
   )
 }
