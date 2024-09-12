@@ -3,8 +3,8 @@ import { RigidBody } from '@react-three/rapier'
 import { useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
+import { approximatelyEqual } from '@/shared/lib/math'
 import { Ghost } from '@/shared/resources'
-import { approximatelyEqual } from '@/shared/utils/math'
 
 import { usePlayerStore } from '..'
 

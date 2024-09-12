@@ -4,7 +4,7 @@ import { MathUtils } from 'three'
 
 import { Ground } from '@/shared/resources'
 
-import { generateTileset } from '../utils'
+import { generateTileset } from '../lib'
 
 import { Tile } from './tile'
 
