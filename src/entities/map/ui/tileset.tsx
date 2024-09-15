@@ -4,7 +4,7 @@ import { MathUtils } from 'three'
 
 import { Ground } from '@/shared/resources'
 
-import { generateTileset } from '../utils'
+import { generateTileset } from '../lib'
 
 import { Tile } from './tile'
 
@@ -15,17 +15,17 @@ const TILESET_WIDTH = 55
 
 interface TilesetProps {
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void
-  onPointerDown: (event: ThreeEvent<PointerEvent>) => void
+  onPointerUp: (event: ThreeEvent<PointerEvent>) => void
 }
 
 const Tileset = memo((props: TilesetProps) => {
-  const { onPointerMove, onPointerDown } = props
+  const { onPointerMove, onPointerUp } = props
 
   const [tileset] = useState<TileType[][]>(generateTileset(TILESET_WIDTH))
 
   return (
     <RigidBody type="fixed">
-      <group onPointerMove={onPointerMove} onPointerUp={onPointerDown}>
+      <group onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
         <Ground scale={TILESET_WIDTH} />
 
         {tileset

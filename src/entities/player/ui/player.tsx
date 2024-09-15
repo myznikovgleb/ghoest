@@ -1,11 +1,10 @@
 import { useFrame } from '@react-three/fiber'
-import { CapsuleCollider, RigidBody } from '@react-three/rapier'
+import { RigidBody } from '@react-three/rapier'
 import { useRef, useState } from 'react'
 import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
+import { approximatelyEqual } from '@/shared/lib/math'
 import { Ghost } from '@/shared/resources'
-import { useIsDebug } from '@/shared/utils/hooks'
-import { approximatelyEqual } from '@/shared/utils/math'
 
 import { usePlayerStore } from '..'
 
@@ -17,11 +16,20 @@ const FACTOR_VELOCITY = 10
 const FACTOR_FORCE_DAMPING = 0.5
 const FACTOR_CAMERA_SMOOTH = 5
 
-const Player = () => {
-  const capsuleCollider = usePlayerStore((state) => state.capsuleCollider)
+/**
+ * 15 frames per second value
+ */
+const MAX_DELTA = 1 / 15
+
+interface PlayerProps {
+  isStickedCamera?: boolean
+}
+
+const Player = (props: PlayerProps) => {
+  const collider = usePlayerStore((state) => state.collider)
   const nextPositionSerialized = usePlayerStore((state) => state.position)
 
-  const isDebug = useIsDebug()
+  const { isStickedCamera = false } = props
 
   const refRigidBody = useRef<RapierRigidBody>(null)
   const refModel = useRef<Group>(null)
@@ -98,7 +106,7 @@ const Player = () => {
       return
     }
 
-    const hasSpaceToMove = diffPosition.length() > capsuleCollider.radius * 1.5
+    const hasSpaceToMove = diffPosition.length() > collider.radius * 1.5
     if (!hasSpaceToMove) {
       return
     }
@@ -128,24 +136,18 @@ const Player = () => {
   }
 
   useFrame((state, delta) => {
-    !isDebug && setCamera()
+    !isStickedCamera && setCamera()
     setMovement()
 
-    !isDebug && stepCamera(state.camera, delta)
-    stepMovement(delta)
+    const deltaClamped = Math.min(delta, MAX_DELTA)
+
+    !isStickedCamera && stepCamera(state.camera, deltaClamped)
+    stepMovement(deltaClamped)
   })
 
   return (
-    <RigidBody
-      ref={refRigidBody}
-      colliders={false}
-      lockRotations
-      position={[0, capsuleCollider.halfHeight * 4, 0]}
-    >
-      <CapsuleCollider
-        args={[capsuleCollider.halfHeight, capsuleCollider.radius]}
-      />
-      <Ghost ref={refModel} position={[0, -capsuleCollider.halfHeight, 0]} />
+    <RigidBody ref={refRigidBody} colliders="cuboid" lockRotations>
+      <Ghost ref={refModel} />
     </RigidBody>
   )
 }

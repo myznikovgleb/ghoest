@@ -1,10 +1,10 @@
-# Ghoest app
+# Ghoest App
 
-[Ghoest app](https://ghoest.vercel.app "Ghoest app") is an RPG app significantly charged with dark magic.
+[Ghoest App](https://ghoest.vercel.app "Ghoest App") is a role-playing game significantly charged with dark magic.
 
 ## How to run
 
-Follow [link](https://ghoest.vercel.app "Run Ghoest app") to give a try.
+Follow [link](https://ghoest.vercel.app "Run Ghoest App") to give a try.
 
 ## Tech details
 
