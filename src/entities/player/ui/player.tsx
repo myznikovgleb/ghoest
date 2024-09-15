@@ -16,6 +16,11 @@ const FACTOR_VELOCITY = 10
 const FACTOR_FORCE_DAMPING = 0.5
 const FACTOR_CAMERA_SMOOTH = 5
 
+/**
+ * 15 frames per second value
+ */
+const MAX_DELTA = 1 / 15
+
 interface PlayerProps {
   isStickedCamera?: boolean
 }
@@ -134,8 +139,10 @@ const Player = (props: PlayerProps) => {
     !isStickedCamera && setCamera()
     setMovement()
 
-    !isStickedCamera && stepCamera(state.camera, delta)
-    stepMovement(delta)
+    const deltaClamped = Math.min(delta, MAX_DELTA)
+
+    !isStickedCamera && stepCamera(state.camera, deltaClamped)
+    stepMovement(deltaClamped)
   })
 
   return (
