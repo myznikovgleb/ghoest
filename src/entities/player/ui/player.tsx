@@ -26,7 +26,7 @@ interface PlayerProps {
 }
 
 const Player = (props: PlayerProps) => {
-  const collider = usePlayerStore((state) => state.collider)
+  const size = usePlayerStore((state) => state.size)
   const nextPositionSerialized = usePlayerStore((state) => state.position)
 
   const { isStickedCamera = false } = props
@@ -106,7 +106,7 @@ const Player = (props: PlayerProps) => {
       return
     }
 
-    const hasSpaceToMove = diffPosition.length() > collider.radius * 1.5
+    const hasSpaceToMove = diffPosition.length() > size.radius * 1.5
     if (!hasSpaceToMove) {
       return
     }

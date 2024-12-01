@@ -2,22 +2,36 @@ import { create } from 'zustand'
 
 import type { Vector3Tuple } from 'three'
 
-interface InitialState {
+interface PlayerState {
+  size: { halfHeight: number; radius: number }
   position: Vector3Tuple
-  collider: { halfHeight: number; radius: number }
+  items: {
+    keys: number
+  }
 }
 
-interface PlayerState extends InitialState {
+interface PlayerActions {
   setPosition: (nextPosition: Vector3Tuple) => void
+  incrementKeys: () => void
 }
 
-const initialState: InitialState = {
-  collider: { halfHeight: 0.4, radius: 0.3 },
+type PlayerStore = PlayerState & PlayerActions
+
+const initialState: PlayerState = {
+  size: { halfHeight: 0.4, radius: 0.3 },
   position: [0, 0, 0],
+  items: {
+    keys: 0,
+  },
 }
 
-export const usePlayerStore = create<PlayerState>()((set) => ({
+export const usePlayerStore = create<PlayerStore>()((set) => ({
   ...initialState,
 
   setPosition: (nextPosition) => set({ position: nextPosition }),
+  incrementKeys: () =>
+    set((state) => ({
+      ...state,
+      items: { ...state.items, keys: state.items.keys + 1 },
+    })),
 }))

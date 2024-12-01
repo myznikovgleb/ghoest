@@ -18,12 +18,12 @@ const Pointer = forwardRef<Group, PointerProps>((props, refExternal) => {
 
   const matcapPointer = useTexture('./experience/matcap_pointer.png')
 
-  const pulsingAnimation = (elapsedTime: number) => {
+  const pulseAnimation = (elapsedTime: number) => {
     if (!refInternal.current) {
       return
     }
 
-    const phi = (elapsedTime % 1) * 2 * Math.PI
+    const phi = elapsedTime * 2 * Math.PI
 
     const scaleUnit = (Math.sin(phi) + 1) * 0.5
     const scale = scaleUnit * 0.5 + 1
@@ -34,7 +34,7 @@ const Pointer = forwardRef<Group, PointerProps>((props, refExternal) => {
 
   useFrame((state) => {
     if (isPulsing) {
-      pulsingAnimation(state.clock.elapsedTime)
+      pulseAnimation(state.clock.elapsedTime)
     }
   })
 
