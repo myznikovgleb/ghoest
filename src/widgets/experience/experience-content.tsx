@@ -4,6 +4,7 @@ import { Physics } from '@react-three/rapier'
 import { Suspense, useEffect, useState } from 'react'
 import { Vector3 } from 'three'
 
+import { Key } from '@/entities/keys'
 import { Map } from '@/entities/map'
 import { Player } from '@/entities/player'
 
@@ -79,6 +80,7 @@ const ExperienceContent = (props: ExperienceContentProps) => {
       <Suspense>
         <Physics debug={isDebugPhysics}>
           <Player isStickedCamera={isStickedCamera} />
+          <Key />
           <Map />
         </Physics>
       </Suspense>

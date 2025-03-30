@@ -1,27 +1,45 @@
 import type { TileType } from '../model'
 
-const generateTileset = (width: number): TileType[][] => {
-  const centerSet: Set<number> = getCenterSet(width)
+const generateTileset = (
+  size: number
+): {
+  tileset: TileType[][]
+  tilemap: Record<TileType, Array<[number, number]>>
+} => {
+  const centerSet: Set<number> = getCenterSet(size)
 
-  const tileset: TileType[][] = new Array(width)
+  const tileset: TileType[][] = new Array(size)
+  const tilemap: Record<TileType, Array<[number, number]>> = {
+    N: [],
+    NE: [],
+    E: [],
+    SE: [],
+    S: [],
+    SW: [],
+    W: [],
+    NW: [],
+    C: [],
+    G: [],
+    P: [],
+    T: [],
+    Y: [],
+  }
 
-  /**
-   * Generate whole tileset
-   */
-  for (let i = 0; i < width; i++) {
-    const tileLine: TileType[] = new Array(width)
+  // Generate whole tileset
+  for (let i = 0; i < size; i++) {
+    const tileLine: TileType[] = new Array(size)
 
-    for (let j = 0; j < width; j++) {
+    for (let j = 0; j < size; j++) {
       if (isCenterTile(i, j, centerSet)) {
         tileLine[j] = 'G'
         continue
       }
 
-      /**
-       * Parse tileset
-       */
       if (isPartiallyOddTile(i, j)) {
         tileLine[j] = 'G'
+        if (isCompletelyOddTile(i, j)) {
+          tilemap['G'].push([i, j])
+        }
         continue
       }
 
@@ -62,29 +80,29 @@ const generateTileset = (width: number): TileType[][] => {
     tileset[i] = tileLine
   }
 
-  /**
-   * Generate tileset corners
-   */
+  // Generate tileset corners
   tileset[0][0] = 'NW'
-  tileset[0][width - 1] = 'NE'
-  tileset[width - 1][width - 1] = 'SE'
-  tileset[width - 1][0] = 'SW'
+  tileset[0][size - 1] = 'NE'
+  tileset[size - 1][size - 1] = 'SE'
+  tileset[size - 1][0] = 'SW'
 
-  /**
-   * Generate tileset edges
-   */
-  for (let i = 1; i < width - 1; i++) {
+  // Generate tileset edges
+  for (let i = 1; i < size - 1; i++) {
     tileset[0][i] = 'N'
-    tileset[i][width - 1] = 'E'
-    tileset[width - 1][i] = 'S'
+    tileset[i][size - 1] = 'E'
+    tileset[size - 1][i] = 'S'
     tileset[i][0] = 'W'
   }
 
-  return tileset
+  return { tileset, tilemap }
 }
 
 const isPartiallyOddTile = (i: number, j: number): boolean => {
   return i % 2 === 1 || j % 2 === 1
+}
+
+const isCompletelyOddTile = (i: number, j: number): boolean => {
+  return i % 2 === 1 && j % 2 === 1
 }
 
 const isCenterTile = (
