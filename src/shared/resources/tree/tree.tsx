@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
@@ -18,10 +19,13 @@ interface TreeProps {
 }
 
 const Tree = forwardRef<Group, TreeProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/tree.glb') as GLTFResult
+  const { nodes } = useGLTF('./experience/tree.glb') as unknown as GLTFResult
 
   const matcapLeaves = useTexture('./experience/matcap_leaves.png')
   const matcapTrunk = useTexture('./experience/matcap_wood.png')
+
+  matcapLeaves.colorSpace = SRGBColorSpace
+  matcapTrunk.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref} dispose={null} {...props}>

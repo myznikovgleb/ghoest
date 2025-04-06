@@ -1,37 +1,18 @@
-import { useControls } from 'leva'
-import { Perf } from 'r3f-perf'
+import { useState } from 'react'
 
 import { ExperienceContent } from './experience-content'
 
 const ExperienceDebug = () => {
-  const { isDebugPhysics, isEnabledControls, isHiddenPerf, isStickedCamera } =
-    useControls(
-      'Debug options',
-      {
-        isDebugPhysics: { value: true, label: 'Is physics in debug mode' },
-        isStickedCamera: { value: true, label: 'Is camera sticked' },
-        isEnabledControls: {
-          value: true,
-          label: 'Is controls enabled',
-          render: (get) => get('Debug options.isStickedCamera'),
-        },
-        isHiddenPerf: { value: false, label: 'Is perf hidden' },
-      },
-      {
-        collapsed: true,
-      }
-    )
+  const [isDebugPhysics] = useState<boolean>(true)
+  const [isEnabledControls] = useState<boolean>(true)
+  const [isStickedCamera] = useState<boolean>(true)
 
   return (
-    <>
-      <ExperienceContent
-        isEnabledControls={isEnabledControls}
-        isDebugPhysics={isDebugPhysics}
-        isStickedCamera={isStickedCamera}
-      />
-
-      {!isHiddenPerf && <Perf position="top-left" showGraph={false} />}
-    </>
+    <ExperienceContent
+      isEnabledControls={isEnabledControls}
+      isDebugPhysics={isDebugPhysics}
+      isStickedCamera={isStickedCamera}
+    />
   )
 }
 

@@ -1,5 +1,6 @@
 import { ContactShadows, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group } from 'three'
 
@@ -13,6 +14,7 @@ const Ground = forwardRef<Group, GroundProps>((props, ref) => {
   const { scale = 1 } = props
 
   const matcapGrass = useTexture('./experience/matcap_grass.png')
+  matcapGrass.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref}>

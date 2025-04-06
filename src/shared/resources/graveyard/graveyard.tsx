@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
@@ -17,9 +18,12 @@ interface GraveyardProps {
 }
 
 const Graveyard = forwardRef<Group, GraveyardProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/graveyard.glb') as GLTFResult
+  const { nodes } = useGLTF(
+    './experience/graveyard.glb'
+  ) as unknown as GLTFResult
 
   const matcapRock = useTexture('./experience/matcap_rock.png')
+  matcapRock.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref} dispose={null} {...props}>

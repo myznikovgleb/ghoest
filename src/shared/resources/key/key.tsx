@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
@@ -18,9 +19,10 @@ interface KeyProps {
 }
 
 const Key = forwardRef<Group, KeyProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/key.glb') as GLTFResult
+  const { nodes } = useGLTF('./experience/key.glb') as unknown as GLTFResult
 
   const matcapGold = useTexture('./experience/matcap_gold.png')
+  matcapGold.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref} dispose={null} {...props}>
