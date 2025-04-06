@@ -12,7 +12,7 @@ const _ = () => {
         <h2 className="text-8xl">👻</h2>
         <Link
           to={path}
-          className="btn btn-primary btn-lg btn-wide text-2xl font-thin tracking-[0.5em]"
+          className="btn btn-primary btn-xl btn-wide font-thin tracking-[0.25em]"
         >
           START
         </Link>
