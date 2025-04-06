@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
@@ -17,9 +18,10 @@ interface GhostProps {
 }
 
 const Ghost = forwardRef<Group, GhostProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/ghost.glb') as GLTFResult
+  const { nodes } = useGLTF('./experience/ghost.glb') as unknown as GLTFResult
 
   const matcapBody = useTexture('./experience/matcap_body.png')
+  matcapBody.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref} dispose={null} {...props}>

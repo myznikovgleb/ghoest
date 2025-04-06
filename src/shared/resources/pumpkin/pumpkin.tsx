@@ -1,5 +1,6 @@
 import { useGLTF, useTexture } from '@react-three/drei'
 import { forwardRef } from 'react'
+import { SRGBColorSpace } from 'three'
 
 import type { Group, Mesh, Vector3Tuple } from 'three'
 import type { GLTF } from 'three-stdlib'
@@ -18,10 +19,13 @@ interface PumpkinProps {
 }
 
 const Pumpkin = forwardRef<Group, PumpkinProps>((props, ref) => {
-  const { nodes } = useGLTF('./experience/pumpkin.glb') as GLTFResult
+  const { nodes } = useGLTF('./experience/pumpkin.glb') as unknown as GLTFResult
 
   const matcapPumpkin = useTexture('./experience/matcap_pumpkin.png')
   const matcapLeaves = useTexture('./experience/matcap_leaves.png')
+
+  matcapPumpkin.colorSpace = SRGBColorSpace
+  matcapLeaves.colorSpace = SRGBColorSpace
 
   return (
     <group ref={ref} dispose={null} {...props}>
