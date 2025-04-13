@@ -8,13 +8,10 @@ const _ = () => {
   return (
     <Layout>
       <section className="flex flex-col items-center justify-center gap-32">
-        <h1 className="text-4xl font-thin tracking-[0.5em]">GHOEST</h1>
+        <h1 className="text-primary text-6xl uppercase">Ghoest</h1>
         <h2 className="text-8xl">👻</h2>
-        <Link
-          to={path}
-          className="btn btn-primary btn-xl btn-wide font-thin tracking-[0.25em]"
-        >
-          START
+        <Link to={path} className="btn btn-primary btn-xl btn-wide">
+          <span>Enter the Game</span>
         </Link>
       </section>
     </Layout>
