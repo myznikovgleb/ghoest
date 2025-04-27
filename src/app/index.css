@@ -7,16 +7,15 @@
 @plugin "daisyui/theme" {
   name: 'light';
   default: true;
-  --color-primary: #64748b;
+  --color-primary: #93e14d;
   --color-primary-content: #f8fafc;
 }
 
 @plugin "daisyui/theme" {
   name: 'dark';
   prefersdark: true;
-  --color-primary: #e2e8f0;
+  --color-primary: #93e14d;
   --color-primary-content: #1e293b;
-  --color-base-100: #262626;
 }
 
 @layer base {
