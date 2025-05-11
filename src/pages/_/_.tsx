@@ -8,22 +8,24 @@ const _ = () => {
 
   return (
     <Layout>
-      <section className="flex flex-col items-center justify-center gap-16">
-        <div className="flex flex-col items-center justify-center gap-8">
-          <div className="bg-base-200 rounded-4xl p-4 md:p-8">
-            <img src="ui/preview_greeting.png" className="size-72" />
+      <section className="pattern flex size-full flex-col items-center justify-center">
+        <div className="bg-base-300 flex flex-col items-center justify-center gap-8 rounded-4xl pb-4">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="bg-base-200 rounded-4xl px-8 py-2">
+              <img src="ui/preview_greeting.png" className="size-56" />
+            </div>
+            <h1 className="text-base-content/70 text-3xl font-semibold">
+              Ghoest App
+            </h1>
           </div>
-          <h1 className="text-base-content/70 text-4xl font-semibold">
-            Ghoest App
-          </h1>
+          <Link
+            to={path}
+            className="btn btn-xl btn-soft btn-primary gap-4 rounded-4xl"
+          >
+            <ArrowRightCircleIcon className="size-12" />
+            <span>Proceed</span>
+          </Link>
         </div>
-        <Link
-          to={path}
-          className="btn btn-xl btn-soft btn-primary gap-8 rounded-4xl"
-        >
-          <ArrowRightCircleIcon className="size-12" />
-          <span>Proceed</span>
-        </Link>
       </section>
     </Layout>
   )
