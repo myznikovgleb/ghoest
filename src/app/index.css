@@ -28,3 +28,18 @@
     cursor: pointer;
   }
 }
+
+@layer components {
+  .pattern {
+    background-image: radial-gradient(
+      var(--color-primary) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
+    mask-image: radial-gradient(
+      ellipse 75% 75% at 50% 50%,
+      #000 50%,
+      transparent 100%
+    );
+  }
+}
